@@ -1,0 +1,11 @@
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+node_modules/
+.vscode/
+.idea/
+*.local
+# legacy single-file build (emoji-heavy); keep local only for now
+oiia_cat_standalone.html

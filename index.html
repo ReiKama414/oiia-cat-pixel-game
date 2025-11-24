@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" class="h-full overflow-hidden">
+<head>
+<link rel="icon" href="./favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" href="./favicon.png" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>OIIA 旋轉貓咪：像素電音大冒險 (OIIA Cat Pixel Spin)</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="app-shell overflow-hidden flex flex-col select-none">
+
+  <main class="flex-1 min-h-0 w-full flex flex-col xl:flex-row gap-2 p-2 overflow-hidden">
+
+    <!-- LEFT: status -->
+    <aside class="hud-rail shrink-0 w-full xl:w-52 2xl:w-56 flex flex-col gap-2 min-h-0 overflow-hidden order-1">
+      <div class="panel p-2 flex flex-col gap-2 min-h-0">
+        <div class="flex items-center gap-2 min-w-0 pb-2 border-b border-[var(--line)]">
+          <img src="assets/oiia_icon.jpg" alt="OIIA" class="w-8 h-8 object-cover shrink-0" style="border-radius:2px;border:1px solid var(--line-strong)" />
+          <div class="min-w-0 flex-1">
+            <div class="pixel-font text-[9px] truncate" style="color:var(--text)">OIIA CAT</div>
+            <span id="hud-wave-badge" class="chip mt-1">WAVE 1</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-6 xl:grid-cols-2 gap-1">
+          <button id="btn-mode-endless" type="button" class="neon-btn ui-btn is-on px-1.5 py-1.5" title="無盡街機">∞</button>
+          <button id="btn-mode-rhythm" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="60秒狂熱">60s</button>
+          <button id="btn-auto-idle" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="掛機">AUTO</button>
+          <button id="btn-open-drawer" type="button" class="neon-btn ui-btn px-1.5 py-1.5 xl:hidden" title="造型/圖鑑">MENU</button>
+          <button id="btn-pause" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="暫停">II</button>
+          <button id="btn-mute" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="音效">SND</button>
+        </div>
+
+        <!-- stats: desktop stacked / mobile row -->
+        <div class="grid grid-cols-5 xl:grid-cols-1 xl:border xl:border-[var(--line)] xl:rounded-sm overflow-hidden">
+          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+            <div class="stat-label">Score</div>
+            <div id="hud-score" class="pixel-font stat-value truncate">0</div>
+          </div>
+          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+            <div class="stat-label">Best</div>
+            <div id="hud-high" class="pixel-font truncate" style="color:var(--accent);font-size:11px">0</div>
+          </div>
+          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+            <div class="stat-label">Combo</div>
+            <div id="hud-combo" class="pixel-font truncate" style="color:var(--pink);font-size:11px">x1</div>
+          </div>
+          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+            <div class="stat-label">Life</div>
+            <div id="hud-hp" class="truncate" style="color:var(--danger);font-size:12px;letter-spacing:1px">HP 3</div>
+          </div>
+          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0">
+            <div class="stat-label">Time</div>
+            <div id="hud-timer" class="pixel-font truncate" style="color:var(--ok);font-size:11px">∞</div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 xl:grid-cols-1 gap-2">
+          <div>
+            <div class="flex justify-between items-baseline gap-1 mb-1">
+              <span class="stat-label">Spin</span>
+              <span id="hud-rpm" class="text-[10px] font-semibold shrink-0" style="color:var(--accent)">0 RPM</span>
+            </div>
+            <div class="meter meter-spin">
+              <div id="bar-spin" style="width: 100%;"></div>
+            </div>
+            <div id="hud-syllable" class="pixel-font text-[9px] mt-1 truncate" style="color:var(--muted)">READY</div>
+          </div>
+          <div>
+            <div class="flex justify-between items-baseline gap-1 mb-1">
+              <span class="stat-label">Vortex</span>
+              <span id="hud-vortex-status" class="text-[10px] font-semibold truncate" style="color:var(--ok)">0%</span>
+            </div>
+            <div class="meter meter-fever">
+              <div id="bar-fever" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hidden xl:flex flex-1 min-h-0 flex-col overflow-hidden">
+        <div class="panel p-2.5 drawer-scroll flex-1">
+          <h3 class="section-title">How to play</h3>
+          <ul class="help-list">
+            <li><strong>Perfect</strong> — 縮圈重合時按旋轉</li>
+            <li><strong>RPM</strong> — 長按加速至 Hyper</li>
+            <li><strong><span class="kbd">E</span></strong> — 漩渦爆發</li>
+            <li><strong><span class="kbd">Q</span></strong> — 衝刺</li>
+            <li><strong>Boss</strong> — 高速旋轉撞擊</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER: stage -->
+    <section class="flex-1 min-h-0 min-w-0 flex flex-col overflow-hidden order-2">
+      <div id="stage-container" class="relative flex-1 min-h-0 w-full overflow-hidden stage-frame neon-border flex items-center justify-center">
+        <canvas id="game-canvas" class="pixel-canvas block w-full h-full"></canvas>
+
+        <div class="pointer-events-none absolute top-2 left-2 right-2 flex items-center justify-between gap-2 z-10">
+          <div id="hud-buffs" class="flex flex-wrap gap-1"></div>
+          <div id="hud-beat-hint" class="hint-chip truncate max-w-[75%]">
+            縮圈重合時按旋轉 = Perfect
+          </div>
+        </div>
+
+        <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-20" style="background:rgba(12,14,20,0.92)">
+          <img src="assets/oiia_icon.jpg" alt="OIIA Cat" class="w-14 h-14 sm:w-16 sm:h-16 mb-3 beat-pulse object-cover" style="border-radius:3px;border:1px solid var(--line-strong)" />
+          <h2 id="overlay-title" class="pixel-font text-sm sm:text-base mb-2" style="color:var(--text)">O-I-I-A CAT SPIN</h2>
+          <p id="overlay-sub" class="text-[12px] max-w-md mb-4 leading-relaxed" style="color:var(--muted)">
+            看準周圍「音浪縮圈」重合瞬間按下 <strong style="color:var(--accent)">Space</strong> 觸發 Perfect。長按旋轉反彈攻擊；蓄滿後可用 <strong style="color:var(--text)">Q / E</strong> 衝刺與漩渦。
+          </p>
+          <button id="btn-start-main" type="button" class="neon-btn start-btn pixel-font">
+            START
+          </button>
+        </div>
+
+        <div id="perk-overlay" class="hidden absolute inset-0 flex flex-col items-center justify-center p-3 sm:p-5 text-center z-30" style="background:rgba(12,14,20,0.94)">
+          <div class="pixel-font text-xs sm:text-sm mb-2" style="color:var(--accent)">WAVE CLEAR</div>
+          <p class="text-[12px] mb-2" style="color:var(--muted)">選一張強化，或按 <span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span>　·　<span id="perk-countdown-sec" style="color:var(--accent);font-weight:700">3.0</span>s 後自動選</p>
+          <div class="w-full max-w-md meter meter-perk mb-3">
+            <div id="perk-timer-bar" style="width: 100%;"></div>
+          </div>
+          <div id="perk-cards" class="grid grid-cols-1 sm:grid-cols-3 gap-2 w-full max-w-lg mb-3"></div>
+          <button id="btn-toggle-auto-perk" type="button" class="neon-btn ui-btn px-3 py-1.5 text-[11px]">
+            自動秒選：關
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT / BOTTOM: controls -->
+    <aside id="side-drawer" class="shrink-0 w-full xl:w-60 2xl:w-64 flex flex-col gap-2 min-h-0 overflow-hidden order-3">
+      <div class="controls-panel panel p-2 sm:p-2.5 flex flex-row xl:flex-col items-center xl:items-stretch justify-between gap-2 shrink-0">
+        <div class="hidden xl:block">
+          <h3 class="section-title mb-0">Controls</h3>
+        </div>
+
+        <div class="flex items-center gap-1 xl:justify-center shrink-0">
+          <button id="btn-dpad-left" type="button" aria-label="左移" class="neon-btn keycap">◀</button>
+          <div class="flex flex-col gap-1">
+            <button id="btn-dpad-up" type="button" aria-label="上移" class="neon-btn keycap">▲</button>
+            <button id="btn-dpad-down" type="button" aria-label="下移" class="neon-btn keycap">▼</button>
+          </div>
+          <button id="btn-dpad-right" type="button" aria-label="右移" class="neon-btn keycap">▶</button>
+        </div>
+
+        <div class="flex flex-col sm:flex-row xl:grid xl:grid-cols-2 gap-1.5 shrink-0">
+          <button id="btn-dash" type="button" class="neon-btn skill-btn dash">
+            <span>DASH</span>
+            <span id="hud-dash-cd" class="sub">Q</span>
+          </button>
+          <button id="btn-vortex" type="button" disabled class="neon-btn skill-btn vortex">
+            <span>VORTEX</span>
+            <span id="hud-vortex-btn-sub" class="sub">E · 蓄力</span>
+          </button>
+        </div>
+
+        <button id="btn-spin-hold" type="button" class="neon-btn spin-btn flex-1 xl:flex-none">
+          <div class="pixel-font">HOLD SPIN</div>
+          <div class="hint">或按住 Space</div>
+        </button>
+      </div>
+
+      <div class="drawer-scroll hidden xl:flex flex-1 min-h-0 flex-col gap-2">
+        <div class="panel p-2.5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="section-title mb-0">Synth</h3>
+            <span class="text-[10px]" style="color:var(--muted)">O / I / A</span>
+          </div>
+          <div class="grid grid-cols-4 gap-1.5">
+            <button id="btn-dj-o" type="button" class="neon-btn dj-key pixel-font text-[10px]">O</button>
+            <button id="btn-dj-i" type="button" class="neon-btn dj-key pixel-font text-[10px]">I</button>
+            <button id="btn-dj-a" type="button" class="neon-btn dj-key pixel-font text-[10px]">A</button>
+            <button id="btn-dj-rave" type="button" class="neon-btn dj-key text-[10px]">BEAT</button>
+          </div>
+        </div>
+
+        <div class="panel p-2.5">
+          <div class="flex items-center justify-between mb-2">
+            <h3 class="section-title mb-0">Skins</h3>
+            <span class="text-[11px]" style="color:var(--accent)">FISH <strong id="hud-fish-bank">0</strong></span>
+          </div>
+          <div id="skins-grid" class="flex flex-col gap-1.5"></div>
+        </div>
+
+        <div class="panel p-2.5">
+          <h3 class="section-title">Guide</h3>
+          <ul class="help-list">
+            <li><strong>Perfect</strong>：縮圈重合旋轉，音爆＋回能</li>
+            <li><strong>RPM</strong>：長按至 Max Hyper，磁吸與分數翻倍</li>
+            <li><strong>Vortex <span class="kbd">E</span></strong>：蓄滿清場吸成魚乾</li>
+            <li><strong>Dash <span class="kbd">Q</span></strong>：瞬移＋短暫無敵</li>
+            <li><strong>Boss</strong>：每波升級；旋轉撞擊反擊</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="mobile-drawer-backdrop" class="hidden fixed inset-0 z-40 flex items-center justify-center p-3 xl:hidden" style="background:rgba(12,14,20,0.88)">
+    <div class="w-full max-w-md max-h-[88dvh] panel p-3 flex flex-col gap-2 overflow-hidden" style="border-color:var(--line-strong)">
+      <div class="flex items-center justify-between pb-2 shrink-0" style="border-bottom:1px solid var(--line)">
+        <span class="pixel-font text-[10px]">MENU</span>
+        <button id="btn-close-drawer" type="button" class="neon-btn ui-btn px-2.5 py-1 text-[11px]">CLOSE</button>
+      </div>
+      <div id="mobile-drawer-content" class="drawer-scroll flex-1 min-h-0 flex flex-col gap-2.5"></div>
+    </div>
+  </div>
+
+  <script src="sprites.js"></script>
+  <script src="audio.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
