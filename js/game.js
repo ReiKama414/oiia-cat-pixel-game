@@ -34,24 +34,29 @@
     } catch (e) {}
   }
 
-  function activateInfiniteSpin(announce) {
-    saveState.infiniteSpin = true;
-    keys.spin = true;
+  function setInfiniteSpin(on, announce) {
+    saveState.infiniteSpin = !!on;
+    keys.spin = !!on;
     persistSave();
     if (announce && state && state.cat) {
-      addFloatingText('CHEAT UNLOCKED: HOLD SPACE FOREVER', state.cat.x, state.cat.y - 40, '#ffe600');
-      state.lastSyllable = '∞ SPIN';
+      if (on) {
+        addFloatingText('CHEAT ON: HOLD SPACE FOREVER', state.cat.x, state.cat.y - 40, '#ffe600');
+        state.lastSyllable = '∞ SPIN';
+      } else {
+        addFloatingText('CHEAT OFF: NORMAL SPACE', state.cat.x, state.cat.y - 40, '#00f0ff');
+        state.lastSyllable = 'READY';
+      }
       updateHUD();
+      drawScene();
     }
   }
 
   function trackKonami(code) {
-    if (saveState.infiniteSpin) return;
     if (code === KONAMI_SEQ[konamiProgress]) {
       konamiProgress += 1;
       if (konamiProgress >= KONAMI_SEQ.length) {
         konamiProgress = 0;
-        activateInfiniteSpin(true);
+        setInfiniteSpin(!saveState.infiniteSpin, true);
       }
     } else {
       konamiProgress = (code === KONAMI_SEQ[0]) ? 1 : 0;

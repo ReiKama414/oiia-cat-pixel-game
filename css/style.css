@@ -417,7 +417,13 @@ html, body {
 }
 
 .toolbar-grid .ui-btn {
-  min-height: 2rem;
+  min-height: 2.15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
 }
 
 .toolbar-grid .btn-infinity {
