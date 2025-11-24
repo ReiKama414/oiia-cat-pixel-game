@@ -31,10 +31,24 @@
 
 | 層級 | 技術 |
 | --- | --- |
-| 介面 | HTML · Tailwind CDN · CSS |
-| 迴圈 | Canvas 2D · `game.js` |
-| 繪圖 | 像素精靈 · `sprites.js` |
-| 音訊 | Web Audio 共振峰合成 · `audio.js` |
+| 介面 | `index.html` · Tailwind CDN · `css/style.css` |
+| 迴圈 | Canvas 2D · `js/game.js` |
+| 繪圖 | 像素精靈 · `js/sprites.js` |
+| 音訊 | Web Audio 共振峰合成 · `js/audio.js` |
+| 素材 | `assets/`（圖示 · favicon） |
+
+## 專案結構
+
+```
+oiia-cat-pixel-game/
+├── index.html
+├── css/style.css
+├── js/{game,sprites,audio}.js
+├── assets/
+├── LICENSE
+├── README.md
+└── README.zh-TW.md
+```
 
 ## 快速開始
 

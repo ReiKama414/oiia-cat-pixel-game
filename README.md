@@ -31,10 +31,24 @@ A compact, full-viewport (`100dvw` / `100dvh`) browser arcade built around the s
 
 | Layer | Tech |
 | --- | --- |
-| Shell | HTML · Tailwind CDN · CSS |
-| Loop | Canvas 2D · `game.js` |
-| Art | Pixel sprites · `sprites.js` |
-| Audio | Web Audio formant synth · `audio.js` |
+| Shell | `index.html` · Tailwind CDN · `css/style.css` |
+| Loop | Canvas 2D · `js/game.js` |
+| Art | Pixel sprites · `js/sprites.js` |
+| Audio | Web Audio formant synth · `js/audio.js` |
+| Assets | `assets/` (icon · favicons) |
+
+## Structure
+
+```
+oiia-cat-pixel-game/
+├── index.html
+├── css/style.css
+├── js/{game,sprites,audio}.js
+├── assets/
+├── LICENSE
+├── README.md
+└── README.zh-TW.md
+```
 
 ## Quick start
 
