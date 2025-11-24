@@ -15,16 +15,16 @@
 
     <!-- LEFT: status -->
     <aside class="hud-rail shrink-0 w-full xl:w-52 2xl:w-56 flex flex-col gap-2 min-h-0 overflow-hidden order-1">
-      <div class="panel p-2 flex flex-col gap-2 min-h-0">
-        <div class="flex items-center gap-2 min-w-0 pb-2 border-b border-[var(--line)]">
-          <img src="assets/oiia_icon.jpg" alt="OIIA" class="w-8 h-8 object-cover shrink-0" style="border-radius:2px;border:1px solid var(--line-strong)" />
+      <div class="panel panel-cyan p-2 flex flex-col gap-2 min-h-0">
+        <div class="flex items-center gap-2 min-w-0 pb-2" style="border-bottom:1px solid rgba(0,240,255,0.2)">
+          <img src="assets/oiia_icon.jpg" alt="OIIA" class="w-8 h-8 object-cover shrink-0" style="border-radius:8px;border:1px solid rgba(0,240,255,0.55);box-shadow:0 0 10px rgba(0,240,255,0.25)" />
           <div class="min-w-0 flex-1">
-            <div class="pixel-font text-[9px] truncate" style="color:var(--text)">OIIA CAT</div>
+            <div class="pixel-font text-[9px] truncate" style="color:var(--cyan);text-shadow:0 0 8px rgba(0,240,255,0.4)">OIIA CAT</div>
             <span id="hud-wave-badge" class="chip mt-1">WAVE 1</span>
           </div>
         </div>
 
-        <div class="grid grid-cols-6 xl:grid-cols-2 gap-1">
+        <div class="toolbar-grid grid grid-cols-3 xl:grid-cols-2 gap-1">
           <button id="btn-mode-endless" type="button" class="neon-btn ui-btn is-on px-1.5 py-1.5" title="無盡街機">∞</button>
           <button id="btn-mode-rhythm" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="60秒狂熱">60s</button>
           <button id="btn-auto-idle" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="掛機">AUTO</button>
@@ -41,37 +41,37 @@
           </div>
           <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
             <div class="stat-label">Best</div>
-            <div id="hud-high" class="pixel-font truncate" style="color:var(--accent);font-size:11px">0</div>
+            <div id="hud-high" class="pixel-font truncate" style="color:var(--yellow);font-size:11px;text-shadow:0 0 8px rgba(255,230,0,0.35)">0</div>
           </div>
           <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
             <div class="stat-label">Combo</div>
-            <div id="hud-combo" class="pixel-font truncate" style="color:var(--pink);font-size:11px">x1</div>
+            <div id="hud-combo" class="pixel-font truncate" style="color:var(--pink);font-size:11px;text-shadow:0 0 8px rgba(255,42,133,0.4)">x1</div>
           </div>
           <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
             <div class="stat-label">Life</div>
-            <div id="hud-hp" class="truncate" style="color:var(--danger);font-size:12px;letter-spacing:1px">HP 3</div>
+            <div id="hud-hp" class="truncate" style="color:var(--pink);font-size:12px;letter-spacing:1px">HP 3</div>
           </div>
           <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0">
             <div class="stat-label">Time</div>
-            <div id="hud-timer" class="pixel-font truncate" style="color:var(--ok);font-size:11px">∞</div>
+            <div id="hud-timer" class="pixel-font truncate" style="color:var(--green);font-size:11px">∞</div>
           </div>
         </div>
 
         <div class="grid grid-cols-2 xl:grid-cols-1 gap-2">
           <div>
             <div class="flex justify-between items-baseline gap-1 mb-1">
-              <span class="stat-label">Spin</span>
-              <span id="hud-rpm" class="text-[10px] font-semibold shrink-0" style="color:var(--accent)">0 RPM</span>
+              <span class="stat-label" style="color:var(--cyan)">Spin</span>
+              <span id="hud-rpm" class="text-[10px] font-semibold shrink-0" style="color:var(--yellow)">0 RPM</span>
             </div>
             <div class="meter meter-spin">
               <div id="bar-spin" style="width: 100%;"></div>
             </div>
-            <div id="hud-syllable" class="pixel-font text-[9px] mt-1 truncate" style="color:var(--muted)">READY</div>
+            <div id="hud-syllable" class="pixel-font text-[9px] mt-1 truncate" style="color:var(--yellow)">READY</div>
           </div>
           <div>
             <div class="flex justify-between items-baseline gap-1 mb-1">
-              <span class="stat-label">Vortex</span>
-              <span id="hud-vortex-status" class="text-[10px] font-semibold truncate" style="color:var(--ok)">0%</span>
+              <span class="stat-label" style="color:var(--pink)">Vortex</span>
+              <span id="hud-vortex-status" class="text-[10px] font-semibold truncate" style="color:var(--green)">0%</span>
             </div>
             <div class="meter meter-fever">
               <div id="bar-fever" style="width: 0%;"></div>
@@ -80,16 +80,20 @@
         </div>
       </div>
 
-      <div class="hidden xl:flex flex-1 min-h-0 flex-col overflow-hidden">
-        <div class="panel p-2.5 drawer-scroll flex-1">
-          <h3 class="section-title">How to play</h3>
-          <ul class="help-list">
-            <li><strong>Perfect</strong> — 縮圈重合時按旋轉</li>
-            <li><strong>RPM</strong> — 長按加速至 Hyper</li>
-            <li><strong><span class="kbd">E</span></strong> — 漩渦爆發</li>
-            <li><strong><span class="kbd">Q</span></strong> — 衝刺</li>
-            <li><strong>Boss</strong> — 高速旋轉撞擊</li>
-          </ul>
+      <div class="hidden xl:flex flex-1 min-h-0 flex-col gap-2 overflow-hidden">
+        <div class="panel panel-pink space-bay flex-1 min-h-0 relative overflow-hidden flex flex-col">
+          <div class="space-stars" aria-hidden="true"></div>
+          <div class="relative z-[1] flex flex-col items-center justify-center gap-2 flex-1 p-3 text-center">
+            <img src="assets/oiia_icon.jpg" alt="" class="w-16 h-16 object-cover beat-pulse space-cat" />
+            <div class="pixel-font text-[9px]" style="color:var(--cyan);text-shadow:0 0 10px rgba(0,240,255,0.5)">O-I-I-A</div>
+            <div class="text-[10px] leading-snug" style="color:var(--muted)">深空電音軌道<br/>縮圈重合＝Perfect</div>
+          </div>
+          <div class="relative z-[1] p-2.5 pt-0">
+            <div class="space-tips">
+              <div><span class="kbd">Space</span> 旋轉</div>
+              <div><span class="kbd">Q</span> 衝刺　<span class="kbd">E</span> 漩渦</div>
+            </div>
+          </div>
         </div>
       </div>
     </aside>
@@ -106,11 +110,11 @@
           </div>
         </div>
 
-        <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-20" style="background:rgba(12,14,20,0.92)">
-          <img src="assets/oiia_icon.jpg" alt="OIIA Cat" class="w-14 h-14 sm:w-16 sm:h-16 mb-3 beat-pulse object-cover" style="border-radius:3px;border:1px solid var(--line-strong)" />
-          <h2 id="overlay-title" class="pixel-font text-sm sm:text-base mb-2" style="color:var(--text)">O-I-I-A CAT SPIN</h2>
+        <div id="game-overlay" class="absolute inset-0 flex flex-col items-center justify-center p-4 text-center z-20" style="background:rgba(8,4,20,0.9);backdrop-filter:blur(4px)">
+          <img src="assets/oiia_icon.jpg" alt="OIIA Cat" class="w-14 h-14 sm:w-16 sm:h-16 mb-3 beat-pulse object-cover" style="border-radius:14px;border:2px solid var(--pink);box-shadow:0 0 18px rgba(255,42,133,0.45)" />
+          <h2 id="overlay-title" class="pixel-font text-sm sm:text-base mb-2" style="color:var(--cyan);text-shadow:0 0 12px rgba(0,240,255,0.45)">O-I-I-A CAT SPIN</h2>
           <p id="overlay-sub" class="text-[12px] max-w-md mb-4 leading-relaxed" style="color:var(--muted)">
-            看準周圍「音浪縮圈」重合瞬間按下 <strong style="color:var(--accent)">Space</strong> 觸發 Perfect。長按旋轉反彈攻擊；蓄滿後可用 <strong style="color:var(--text)">Q / E</strong> 衝刺與漩渦。
+            看準周圍「音浪縮圈」重合瞬間按下 <strong style="color:var(--yellow)">Space</strong> 觸發 Perfect。長按旋轉反彈攻擊；蓄滿後可用 <strong style="color:var(--cyan)">Q / E</strong> 衝刺與漩渦。
           </p>
           <button id="btn-start-main" type="button" class="neon-btn start-btn pixel-font">
             START
@@ -118,8 +122,8 @@
         </div>
 
         <div id="perk-overlay" class="hidden absolute inset-0 flex flex-col items-center justify-center p-3 sm:p-5 text-center z-30" style="background:rgba(12,14,20,0.94)">
-          <div class="pixel-font text-xs sm:text-sm mb-2" style="color:var(--accent)">WAVE CLEAR</div>
-          <p class="text-[12px] mb-2" style="color:var(--muted)">選一張強化，或按 <span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span>　·　<span id="perk-countdown-sec" style="color:var(--accent);font-weight:700">3.0</span>s 後自動選</p>
+          <div class="pixel-font text-xs sm:text-sm mb-2" style="color:var(--yellow);text-shadow:0 0 10px rgba(255,230,0,0.4)">WAVE CLEAR</div>
+          <p class="text-[12px] mb-2" style="color:var(--muted)">選一張強化，或按 <span class="kbd">1</span> <span class="kbd">2</span> <span class="kbd">3</span>　·　<span id="perk-countdown-sec" style="color:var(--yellow);font-weight:800">3.0</span>s 後自動選</p>
           <div class="w-full max-w-md meter meter-perk mb-3">
             <div id="perk-timer-bar" style="width: 100%;"></div>
           </div>
@@ -133,9 +137,9 @@
 
     <!-- RIGHT / BOTTOM: controls -->
     <aside id="side-drawer" class="shrink-0 w-full xl:w-60 2xl:w-64 flex flex-col gap-2 min-h-0 overflow-hidden order-3">
-      <div class="controls-panel panel p-2 sm:p-2.5 flex flex-row xl:flex-col items-center xl:items-stretch justify-between gap-2 shrink-0">
+      <div class="controls-panel panel panel-pink p-2 sm:p-2.5 flex flex-row xl:flex-col items-center xl:items-stretch justify-between gap-2 shrink-0">
         <div class="hidden xl:block">
-          <h3 class="section-title mb-0">Controls</h3>
+          <h3 class="section-title mb-0" style="color:var(--pink)">Controls</h3>
         </div>
 
         <div class="flex items-center gap-1 xl:justify-center shrink-0">
@@ -165,9 +169,9 @@
       </div>
 
       <div class="drawer-scroll hidden xl:flex flex-1 min-h-0 flex-col gap-2">
-        <div class="panel p-2.5">
+        <div class="panel panel-pink p-2.5">
           <div class="flex items-center justify-between mb-2">
-            <h3 class="section-title mb-0">Synth</h3>
+            <h3 class="section-title mb-0" style="color:var(--pink)">Synth</h3>
             <span class="text-[10px]" style="color:var(--muted)">O / I / A</span>
           </div>
           <div class="grid grid-cols-4 gap-1.5">
@@ -178,16 +182,16 @@
           </div>
         </div>
 
-        <div class="panel p-2.5">
+        <div class="panel panel-cyan p-2.5">
           <div class="flex items-center justify-between mb-2">
             <h3 class="section-title mb-0">Skins</h3>
-            <span class="text-[11px]" style="color:var(--accent)">FISH <strong id="hud-fish-bank">0</strong></span>
+            <span class="text-[11px]" style="color:var(--yellow)">FISH <strong id="hud-fish-bank">0</strong></span>
           </div>
           <div id="skins-grid" class="flex flex-col gap-1.5"></div>
         </div>
 
         <div class="panel p-2.5">
-          <h3 class="section-title">Guide</h3>
+          <h3 class="section-title" style="color:var(--yellow)">Guide</h3>
           <ul class="help-list">
             <li><strong>Perfect</strong>：縮圈重合旋轉，音爆＋回能</li>
             <li><strong>RPM</strong>：長按至 Max Hyper，磁吸與分數翻倍</li>
@@ -201,9 +205,9 @@
   </main>
 
   <div id="mobile-drawer-backdrop" class="hidden fixed inset-0 z-40 flex items-center justify-center p-3 xl:hidden" style="background:rgba(12,14,20,0.88)">
-    <div class="w-full max-w-md max-h-[88dvh] panel p-3 flex flex-col gap-2 overflow-hidden" style="border-color:var(--line-strong)">
-      <div class="flex items-center justify-between pb-2 shrink-0" style="border-bottom:1px solid var(--line)">
-        <span class="pixel-font text-[10px]">MENU</span>
+    <div class="w-full max-w-md max-h-[88dvh] panel panel-cyan p-3 flex flex-col gap-2 overflow-hidden">
+      <div class="flex items-center justify-between pb-2 shrink-0" style="border-bottom:1px solid rgba(0,240,255,0.25)">
+        <span class="pixel-font text-[10px]" style="color:var(--cyan)">MENU</span>
         <button id="btn-close-drawer" type="button" class="neon-btn ui-btn px-2.5 py-1 text-[11px]">CLOSE</button>
       </div>
       <div id="mobile-drawer-content" class="drawer-scroll flex-1 min-h-0 flex flex-col gap-2.5"></div>

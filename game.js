@@ -36,11 +36,11 @@
   let gameState = 'ready'; // 'ready' | 'playing' | 'paused' | 'perk' | 'gameover'
 
   const PERK_POOL = [
-    { id: 'magnet', icon: 'MAG', title: '超導磁力場', desc: '旋轉吸引魚乾與道具的半徑 +45%' },
-    { id: 'battery', icon: 'PWR', title: '永動貓罐電池', desc: '旋轉能量消耗速度降低 30%，回復速度 +35%' },
-    { id: 'shockwave', icon: 'AOE', title: '擴散音爆圈', desc: 'PERFECT 節拍音爆與反彈傷害範圍 +40%' },
-    { id: 'vortex_fast', icon: 'VTX', title: '黑洞加速器', desc: '漩渦爆發與 FEVER 狂熱條累積速度 +40%' },
-    { id: 'heal', icon: 'HP+', title: '九命貓薄荷', desc: '立即恢復 1 顆愛心生命，並獲得 +250 額外加分' }
+    { id: 'magnet', icon: '🧲', title: '超導磁力場', desc: '旋轉吸引魚乾與道具的半徑 +45%' },
+    { id: 'battery', icon: '🔋', title: '永動貓罐電池', desc: '旋轉能量消耗速度降低 30%，回復速度 +35%' },
+    { id: 'shockwave', icon: '💥', title: '擴散音爆圈', desc: 'PERFECT 節拍音爆與反彈傷害範圍 +40%' },
+    { id: 'vortex_fast', icon: '🌌', title: '黑洞加速器', desc: '漩渦爆發與 FEVER 狂熱條累積速度 +40%' },
+    { id: 'heal', icon: '💖', title: '九命貓薄荷', desc: '立即恢復 1 顆愛心生命，並獲得 +250 額外加分' }
   ];
 
   let state = {};
@@ -389,8 +389,8 @@
       box.innerHTML = '';
       return;
     }
-    box.innerHTML = '<span class="hint-chip" style="color:var(--accent)">強化 ' +
-      state.perks.list.join(' · ') + '</span>';
+    box.innerHTML = '<span class="hint-chip buff-pills" style="color:var(--yellow);border-color:rgba(255,42,133,0.45)">強化 ' +
+      state.perks.list.join(' ') + '</span>';
   }
 
   function runAutoIdleAI() {
@@ -1104,31 +1104,35 @@
         const isSelected = saveState.selectedSkin === key;
 
         const card = document.createElement('div');
-        card.className = 'p-2 flex flex-col justify-between gap-1.5 ui-btn' +
-          (isSelected ? ' is-on' : '');
+        card.className = 'skin-card p-2.5 flex flex-col justify-between gap-1.5';
         card.style.cursor = 'default';
-        if (!unlocked) card.style.opacity = '0.55';
+        if (isSelected) {
+          card.classList.add('skin-card-on');
+        } else if (!unlocked) {
+          card.classList.add('skin-card-locked');
+        } else {
+          card.classList.add('skin-card-ready');
+        }
 
+        const nameColor = isSelected ? '#ffffff' : (unlocked ? 'var(--cyan)' : '#e8dff8');
+        const descColor = isSelected ? 'rgba(255,255,255,0.88)' : (unlocked ? '#cbb8e8' : '#b7a8d4');
         const topRow = document.createElement('div');
         topRow.innerHTML =
           '<div class="flex items-center justify-between gap-1">' +
-            '<span class="font-bold text-xs" style="color:inherit">' + sk.name + '</span>' +
+            '<span class="font-bold text-xs" style="color:' + nameColor + '">' + sk.name + '</span>' +
             '<span class="chip">' +
               (sk.unlockScore === 0 ? '預設' : ('最高分 ' + sk.unlockScore)) +
             '</span>' +
           '</div>' +
-          '<p class="text-[10px] mt-0.5" style="color:var(--muted);opacity:0.9">' + sk.desc + '</p>';
+          '<p class="text-[11px] mt-1 leading-snug" style="color:' + descColor + '">' + sk.desc + '</p>';
 
         const actionBtn = document.createElement('button');
         actionBtn.type = 'button';
         if (isSelected) {
-          actionBtn.className = 'neon-btn w-full py-1 text-[10px] font-bold';
-          actionBtn.style.background = '#1a1408';
-          actionBtn.style.color = 'var(--accent)';
-          actionBtn.style.border = '1px solid #c48a28';
+          actionBtn.className = 'neon-btn ui-btn is-teal w-full py-1.5 text-[11px] font-bold';
           actionBtn.textContent = '使用中';
         } else if (unlocked) {
-          actionBtn.className = 'neon-btn ui-btn w-full py-1 text-[10px] font-bold';
+          actionBtn.className = 'neon-btn ui-btn is-on w-full py-1.5 text-[11px] font-bold';
           actionBtn.textContent = '切換';
           actionBtn.addEventListener('click', function() {
             saveState.selectedSkin = key;
@@ -1138,7 +1142,7 @@
             drawScene();
           });
         } else {
-          actionBtn.className = 'neon-btn ui-btn w-full py-1 text-[10px] font-bold';
+          actionBtn.className = 'neon-btn skin-lock-btn w-full py-1.5 text-[11px] font-bold';
           actionBtn.disabled = true;
           actionBtn.textContent = '未解鎖';
           actionBtn.title = '需最高分達 ' + sk.unlockScore;
