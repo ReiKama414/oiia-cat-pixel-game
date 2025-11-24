@@ -25,7 +25,7 @@
         </div>
 
         <div class="toolbar-grid grid grid-cols-3 xl:grid-cols-2 gap-1">
-          <button id="btn-mode-endless" type="button" class="neon-btn ui-btn is-on px-1.5 py-1.5" title="無盡街機">∞</button>
+          <button id="btn-mode-endless" type="button" class="neon-btn ui-btn is-on px-1.5 py-1.5 btn-infinity" title="無盡街機">∞</button>
           <button id="btn-mode-rhythm" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="60秒狂熱">60s</button>
           <button id="btn-auto-idle" type="button" class="neon-btn ui-btn px-1.5 py-1.5" title="掛機">AUTO</button>
           <button id="btn-open-drawer" type="button" class="neon-btn ui-btn px-1.5 py-1.5 xl:hidden" title="造型/圖鑑">MENU</button>
@@ -35,25 +35,25 @@
 
         <!-- stats: desktop stacked / mobile row -->
         <div class="grid grid-cols-5 xl:grid-cols-1 xl:border xl:border-[var(--line)] xl:rounded-sm overflow-hidden">
-          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+          <div class="stat-row text-center px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
             <div class="stat-label">Score</div>
-            <div id="hud-score" class="pixel-font stat-value truncate">0</div>
+            <div id="hud-score" class="pixel-font stat-value stat-num">0</div>
           </div>
-          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+          <div class="stat-row text-center px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
             <div class="stat-label">Best</div>
-            <div id="hud-high" class="pixel-font truncate" style="color:var(--yellow);font-size:11px;text-shadow:0 0 8px rgba(255,230,0,0.35)">0</div>
+            <div id="hud-high" class="pixel-font stat-num" style="color:var(--yellow);text-shadow:0 0 8px rgba(255,230,0,0.35)">0</div>
           </div>
-          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+          <div class="stat-row text-center px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
             <div class="stat-label">Combo</div>
-            <div id="hud-combo" class="pixel-font truncate" style="color:var(--pink);font-size:11px;text-shadow:0 0 8px rgba(255,42,133,0.4)">x1</div>
+            <div id="hud-combo" class="pixel-font stat-num" style="color:var(--pink);text-shadow:0 0 8px rgba(255,42,133,0.4)">x1</div>
           </div>
-          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
+          <div class="stat-row text-center px-1 xl:px-2 py-1 xl:py-1.5 border-0 xl:border-b xl:border-[var(--line)]">
             <div class="stat-label">Life</div>
-            <div id="hud-hp" class="truncate" style="color:var(--pink);font-size:12px;letter-spacing:1px">HP 3</div>
+            <div id="hud-hp" class="stat-num" style="color:var(--pink);letter-spacing:1px">HP 3</div>
           </div>
-          <div class="stat-row text-center xl:text-left px-1 xl:px-2 py-1 xl:py-1.5 border-0">
+          <div class="stat-row text-center px-1 xl:px-2 py-1 xl:py-1.5 border-0">
             <div class="stat-label">Time</div>
-            <div id="hud-timer" class="pixel-font truncate" style="color:var(--green);font-size:11px">∞</div>
+            <div id="hud-timer" class="pixel-font stat-num" style="color:var(--green)">∞</div>
           </div>
         </div>
 
@@ -66,7 +66,7 @@
             <div class="meter meter-spin">
               <div id="bar-spin" style="width: 100%;"></div>
             </div>
-            <div id="hud-syllable" class="pixel-font text-[9px] mt-1 truncate" style="color:var(--yellow)">READY</div>
+            <div id="hud-syllable" class="pixel-font hud-syllable mt-1.5 truncate" style="color:var(--yellow)">READY</div>
           </div>
           <div>
             <div class="flex justify-between items-baseline gap-1 mb-1">
@@ -90,13 +90,26 @@
               <p class="text-[11px] leading-snug" style="color:var(--muted)">Myers · portfolio &amp; open experiments</p>
             </div>
             <div class="flex flex-col gap-1.5">
-              <a class="neon-btn author-link" href="https://reikama414.vercel.app/" target="_blank" rel="noopener noreferrer">Site · reikama414.vercel.app</a>
-              <a class="neon-btn author-link author-link-gh" href="https://github.com/ReiKama414/oiia-cat-pixel-game" target="_blank" rel="noopener noreferrer">GitHub · oiia-cat-pixel-game</a>
-              <a class="neon-btn author-link" href="https://github.com/ReiKama414" target="_blank" rel="noopener noreferrer">GitHub · ReiKama414</a>
+              <a class="neon-btn author-link" href="https://reikama414.vercel.app/" target="_blank" rel="noopener noreferrer">
+                <svg class="author-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3 12h18M12 3c2.5 2.8 3.8 6 3.8 9s-1.3 6.2-3.8 9c-2.5-2.8-3.8-6-3.8-9s1.3-6.2 3.8-9z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+                <span class="author-link-text"><strong>Site</strong><small>reikama414.vercel.app</small></span>
+              </a>
+              <a class="neon-btn author-link author-link-gh" href="https://github.com/ReiKama414/oiia-cat-pixel-game" target="_blank" rel="noopener noreferrer">
+                <svg class="author-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2C6.48 2 2 6.58 2 12.26c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.48 0-.24-.01-.87-.01-1.7-2.78.62-3.37-1.37-3.37-1.37-.46-1.2-1.12-1.52-1.12-1.52-.92-.64.07-.63.07-.63 1.02.07 1.56 1.07 1.56 1.07.9 1.58 2.36 1.12 2.94.86.09-.67.35-1.12.63-1.38-2.22-.26-4.55-1.14-4.55-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.27 2.75 1.05A9.3 9.3 0 0 1 12 6.8c.85 0 1.7.12 2.5.34 1.9-1.32 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.8-4.57 5.06.36.32.68.94.68 1.9 0 1.38-.01 2.49-.01 2.83 0 .26.18.59.69.48A10.03 10.03 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/></svg>
+                <span class="author-link-text"><strong>Repo</strong><small>oiia-cat-pixel-game</small></span>
+              </a>
+              <a class="neon-btn author-link" href="https://github.com/ReiKama414" target="_blank" rel="noopener noreferrer">
+                <svg class="author-ico" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 12a4.2 4.2 0 1 0-4.2-4.2A4.2 4.2 0 0 0 12 12zm0 1.8c-3.5 0-6.6 1.9-6.6 4.3v.9c0 .5.4.9.9.9h11.4c.5 0 .9-.4.9-.9v-.9c0-2.4-3.1-4.3-6.6-4.3z"/></svg>
+                <span class="author-link-text"><strong>GitHub</strong><small>ReiKama414</small></span>
+              </a>
             </div>
             <div class="space-tips">
-              <div><span class="kbd">Space</span> 旋轉　<span class="kbd">Q</span> 衝刺　<span class="kbd">E</span> 漩渦</div>
-              <div>MIT · 2026 ReiKama414</div>
+              <div class="tip-keys">
+                <div class="tip-key"><span class="kbd">Space</span><span>旋轉</span></div>
+                <div class="tip-key"><span class="kbd">Q</span><span>衝刺</span></div>
+                <div class="tip-key"><span class="kbd">E</span><span>漩渦</span></div>
+              </div>
+              <div class="tip-license">MIT · 2026 ReiKama414</div>
             </div>
           </div>
         </div>

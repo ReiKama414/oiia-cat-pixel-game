@@ -7,8 +7,17 @@
     totalFish: 0,
     selectedSkin: 'classic',
     autoIdle: false,
-    instantAutoPerk: false
+    instantAutoPerk: false,
+    infiniteSpin: false
   };
+
+  // Konami: ↑↑↓↓←→←→BA
+  const KONAMI_SEQ = [
+    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+    'KeyB', 'KeyA'
+  ];
+  let konamiProgress = 0;
 
   function loadSave() {
     try {
@@ -20,14 +29,63 @@
         if (typeof parsed.selectedSkin === 'string') saveState.selectedSkin = parsed.selectedSkin;
         if (typeof parsed.autoIdle === 'boolean') saveState.autoIdle = parsed.autoIdle;
         if (typeof parsed.instantAutoPerk === 'boolean') saveState.instantAutoPerk = parsed.instantAutoPerk;
+        if (typeof parsed.infiniteSpin === 'boolean') saveState.infiniteSpin = parsed.infiniteSpin;
       }
     } catch (e) {}
+  }
+
+  function activateInfiniteSpin(announce) {
+    saveState.infiniteSpin = true;
+    keys.spin = true;
+    persistSave();
+    if (announce && state && state.cat) {
+      addFloatingText('CHEAT UNLOCKED: HOLD SPACE FOREVER', state.cat.x, state.cat.y - 40, '#ffe600');
+      state.lastSyllable = '∞ SPIN';
+      updateHUD();
+    }
+  }
+
+  function trackKonami(code) {
+    if (saveState.infiniteSpin) return;
+    if (code === KONAMI_SEQ[konamiProgress]) {
+      konamiProgress += 1;
+      if (konamiProgress >= KONAMI_SEQ.length) {
+        konamiProgress = 0;
+        activateInfiniteSpin(true);
+      }
+    } else {
+      konamiProgress = (code === KONAMI_SEQ[0]) ? 1 : 0;
+    }
   }
 
   function persistSave() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(saveState));
     } catch (e) {}
+  }
+
+  function formatCompact(n) {
+    const v = Math.max(0, Math.floor(Number(n) || 0));
+    if (v < 10000) return String(v);
+    if (v < 1000000) {
+      const k = v / 1000;
+      return (k >= 100 ? k.toFixed(0) : k.toFixed(1).replace(/\.0$/, '')) + 'K';
+    }
+    if (v < 1000000000) {
+      const m = v / 1000000;
+      return (m >= 100 ? m.toFixed(0) : m.toFixed(2).replace(/\.?0+$/, '')) + 'M';
+    }
+    const b = v / 1000000000;
+    return (b >= 100 ? b.toFixed(0) : b.toFixed(2).replace(/\.?0+$/, '')) + 'B';
+  }
+
+  function fitStatEl(el, text) {
+    if (!el) return;
+    el.textContent = text;
+    el.classList.remove('stat-num-sm', 'stat-num-xs');
+    const len = String(text).length;
+    if (len >= 8) el.classList.add('stat-num-xs');
+    else if (len >= 6) el.classList.add('stat-num-sm');
   }
 
   let canvas, ctx;
@@ -328,7 +386,7 @@
     }
 
     gameState = 'perk';
-    keys.spin = false;
+    if (!saveState.infiniteSpin) keys.spin = false;
     state.perkCountdownMax = 180; // 3.0 seconds at 60fps
     state.perkCountdownTicks = 180;
 
@@ -434,19 +492,23 @@
 
     // 3. Smart Spin Management:
     // Start spinning on the sweet-spot beat when energy is healthy or threat is near
-    const isSweetSpot = (state.beatPhase >= 22 || state.beatPhase <= 3);
-    if (!state.cat.isSpinning) {
-      if ((state.spinEnergy >= 38 && isSweetSpot) || (minThreatDist < 92 && state.spinEnergy > 14) || state.isFever) {
-        keys.spin = true;
-      } else {
-        keys.spin = false;
-      }
+    if (saveState.infiniteSpin) {
+      keys.spin = true;
     } else {
-      // Keep spinning until energy drops below 16% (unless threatening enemy is right next to cat)
-      if (state.spinEnergy < 16 && !state.isFever && minThreatDist > 75) {
-        keys.spin = false;
+      const isSweetSpot = (state.beatPhase >= 22 || state.beatPhase <= 3);
+      if (!state.cat.isSpinning) {
+        if ((state.spinEnergy >= 38 && isSweetSpot) || (minThreatDist < 92 && state.spinEnergy > 14) || state.isFever) {
+          keys.spin = true;
+        } else {
+          keys.spin = false;
+        }
       } else {
-        keys.spin = true;
+        // Keep spinning until energy drops below 16% (unless threatening enemy is right next to cat)
+        if (state.spinEnergy < 16 && !state.isFever && minThreatDist > 75) {
+          keys.spin = false;
+        } else {
+          keys.spin = true;
+        }
       }
     }
 
@@ -550,7 +612,7 @@
     }
 
     // Spin & 3-Tier RPM Overdrive Logic
-    const wantsSpin = keys.spin || state.isFever || state.dashActive > 0;
+    const wantsSpin = keys.spin || saveState.infiniteSpin || state.isFever || state.dashActive > 0;
     if (wantsSpin && state.spinEnergy > 1.5) {
       if (!state.cat.isSpinning) {
         checkBeatParryOnSpinStart();
@@ -791,6 +853,11 @@
 
     if (state.score > saveState.highScore) {
       saveState.highScore = state.score;
+      persistSave();
+    }
+
+    if (saveState.infiniteSpin) {
+      keys.spin = true;
     }
 
     if (state.tick % 3 === 0) {
@@ -942,18 +1009,24 @@
     const dashCdEl = document.getElementById('hud-dash-cd');
     const modeTimerEl = document.getElementById('hud-timer');
 
-    if (scoreEl) scoreEl.textContent = state.score;
-    if (highEl) highEl.textContent = saveState.highScore;
-    if (comboEl) comboEl.textContent = 'x' + state.combo;
+    fitStatEl(scoreEl, formatCompact(state.score));
+    fitStatEl(highEl, formatCompact(saveState.highScore));
+    fitStatEl(comboEl, 'x' + formatCompact(state.combo));
     if (hpEl) hpEl.textContent = state.hp > 0 ? ('HP ' + state.hp) : 'HP 0';
     if (spinBar) spinBar.style.width = Math.round(state.spinEnergy) + '%';
     if (feverBar) feverBar.style.width = (state.isFever ? 100 : Math.round(state.vortexCharge)) + '%';
-    if (sylEl) sylEl.textContent = state.isFever ? 'FEVER' : state.lastSyllable;
+    if (sylEl) {
+      let syl = state.lastSyllable || 'READY';
+      if (state.isFever) syl = 'FEVER';
+      else if (saveState.infiniteSpin) syl = '∞ SPIN';
+      if (syl.length > 12) syl = syl.slice(0, 11) + '…';
+      sylEl.textContent = syl;
+    }
     if (rpmEl) {
       const tierNames = ['', 'T1', 'T2', 'MAX'];
-      rpmEl.textContent = state.rpm + ' RPM ' + (tierNames[state.rpmTier] || '');
+      rpmEl.textContent = formatCompact(state.rpm) + ' RPM ' + (tierNames[state.rpmTier] || '');
     }
-    if (waveBadge) waveBadge.textContent = 'WAVE ' + state.wave;
+    if (waveBadge) waveBadge.textContent = 'W' + formatCompact(state.wave);
 
     if (vortexStatus) {
       vortexStatus.textContent = state.vortexCharge >= 100 ? 'READY · E' : (state.vortexCharge + '%');
@@ -978,7 +1051,7 @@
 
     // Update all fish bank counters (desktop + mobile drawer)
     document.querySelectorAll('#hud-fish-bank, .fish-bank-val').forEach(function(el) {
-      el.textContent = saveState.totalFish;
+      el.textContent = formatCompact(saveState.totalFish);
     });
   }
 
@@ -1012,14 +1085,17 @@
 
   function triggerGameOver(reason) {
     gameState = 'gameover';
-    keys.spin = false;
+    if (!saveState.infiniteSpin) keys.spin = false;
     endFever();
     persistSave();
     updateHUD();
     renderSkinsModal();
     showOverlay(
       'GAME OVER',
-      reason + ' 本局得分：' + state.score + '｜波數：WAVE ' + state.wave + '｜最高連擊：x' + state.maxCombo,
+      reason + ' 本局得分：' + formatCompact(state.score) +
+        '｜波數：WAVE ' + formatCompact(state.wave) +
+        '｜最高連擊：x' + formatCompact(state.maxCombo) +
+        (saveState.highScore ? ('｜BEST：' + formatCompact(saveState.highScore)) : ''),
       '再轉一局 (O-I-I-A!)'
     );
   }
@@ -1071,11 +1147,11 @@
     if (!btnEndless || !btnRhythm) return;
 
     if (gameMode === 'endless') {
-      btnEndless.className = 'neon-btn ui-btn is-on px-1.5 py-1.5';
+      btnEndless.className = 'neon-btn ui-btn is-on px-1.5 py-1.5 btn-infinity';
       btnRhythm.className = 'neon-btn ui-btn px-1.5 py-1.5';
     } else {
       btnRhythm.className = 'neon-btn ui-btn is-teal px-1.5 py-1.5';
-      btnEndless.className = 'neon-btn ui-btn px-1.5 py-1.5';
+      btnEndless.className = 'neon-btn ui-btn px-1.5 py-1.5 btn-infinity';
     }
   }
 
@@ -1173,6 +1249,7 @@
 
   function bindEvents() {
     window.addEventListener('keydown', function(e) {
+      trackKonami(e.code);
       if (gameState === 'perk' && state.currentPerkChoices && state.currentPerkChoices.length > 0) {
         if (e.code === 'Digit1' || e.code === 'Numpad1') {
           e.preventDefault();
@@ -1216,7 +1293,9 @@
       if (e.code === 'ArrowDown' || e.code === 'KeyS') keys.down = false;
       if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
       if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
-      if (e.code === 'Space') keys.spin = false;
+      if (e.code === 'Space') {
+        if (!saveState.infiniteSpin) keys.spin = false;
+      }
     });
 
     canvas.addEventListener('pointerdown', function(e) {
@@ -1251,6 +1330,7 @@
       };
       const endHold = function(e) {
         e.preventDefault();
+        if (keyName === 'spin' && saveState.infiniteSpin) return;
         keys[keyName] = false;
       };
       btn.addEventListener('pointerdown', startHold);
@@ -1313,7 +1393,7 @@
         saveState.autoIdle = !saveState.autoIdle;
         if (!saveState.autoIdle) {
           pointerTarget = null;
-          keys.spin = false;
+          if (!saveState.infiniteSpin) keys.spin = false;
         } else if (gameState === 'ready') {
           startGame(gameMode);
         } else if (gameState === 'perk' && state.currentPerkChoices && state.currentPerkChoices.length > 0) {
@@ -1437,6 +1517,13 @@
     bindEvents();
     renderSkinsModal();
     updateModeButtons();
+    updateAutoIdleButtons();
+    updateHUD();
+    if (saveState.infiniteSpin) {
+      keys.spin = true;
+      const sylEl = document.getElementById('hud-syllable');
+      if (sylEl) sylEl.textContent = '∞ SPIN';
+    }
     if (animId) cancelAnimationFrame(animId);
     animId = requestAnimationFrame(gameLoop);
   };
