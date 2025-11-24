@@ -76,7 +76,7 @@ npx serve .
 
 ## License
 
-MIT License — Copyright (c) 2026 ReiKama414
+MIT License — Copyright (c) ReiKama414 (year: current calendar year)
 
 This project is explicitly open-sourced under MIT (exception to the default All Rights Reserved policy in the Code root README)
 

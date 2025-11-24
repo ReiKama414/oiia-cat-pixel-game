@@ -109,7 +109,7 @@
                 <div class="tip-key"><span class="kbd">Q</span><span>衝刺</span></div>
                 <div class="tip-key"><span class="kbd">E</span><span>漩渦</span></div>
               </div>
-              <div class="tip-license">MIT · 2026 ReiKama414</div>
+              <div class="tip-license">MIT · <span id="copyright-year"></span> ReiKama414</div>
             </div>
           </div>
         </div>
@@ -232,6 +232,12 @@
     </div>
   </div>
 
+  <script>
+    (function () {
+      var y = document.getElementById('copyright-year');
+      if (y) y.textContent = String(new Date().getFullYear());
+    })();
+  </script>
   <script src="./js/sprites.js"></script>
   <script src="./js/audio.js"></script>
   <script src="./js/game.js"></script>

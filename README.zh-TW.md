@@ -76,7 +76,7 @@ npx serve .
 
 ## 授權
 
-MIT License — Copyright (c) 2026 ReiKama414
+MIT License — Copyright (c) ReiKama414（年份為當前年分）
 
 本專案明確以 MIT 開源（相對於 Code 根目錄預設 All Rights Reserved 的例外）
 
