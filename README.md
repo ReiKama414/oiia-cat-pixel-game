@@ -35,7 +35,7 @@ A compact, full-viewport (`100dvw` / `100dvh`) browser arcade built around the s
 | Loop | Canvas 2D · `js/game.js` |
 | Art | Pixel sprites · `js/sprites.js` |
 | Audio | Web Audio formant synth · `js/audio.js` |
-| Assets | `assets/` (icon · favicons) |
+| Assets | `assets/` (OIIA icon · favicon.ico / png · apple-touch-icon) |
 
 ## Structure
 
