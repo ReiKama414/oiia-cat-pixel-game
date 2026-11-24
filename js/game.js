@@ -11,15 +11,15 @@
     infiniteSpin: false
   };
 
-  // Konami: ↑↑↓↓←→←→BA — must be entered as one continuous chain
+  // Konami: ↑↑↓↓←→←→BA
+  // Prefix junk is fine; once the chain starts, keys must match in order.
+  // e.repeat is ignored so holding ↑ does not spam multiple Ups.
   const KONAMI_SEQ = [
     'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
     'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
     'KeyB', 'KeyA'
   ];
-  const KONAMI_GAP_MS = 1400;
   let konamiProgress = 0;
-  let konamiLastAt = 0;
 
   function loadSave() {
     try {
@@ -54,29 +54,21 @@
   }
 
   function trackKonami(code, isRepeat) {
+    // Ignore OS key-repeat while a key is held down
     if (isRepeat) return;
-    const now = performance.now();
-    if (konamiProgress > 0 && now - konamiLastAt > KONAMI_GAP_MS) {
-      konamiProgress = 0;
-    }
+
     if (code === KONAMI_SEQ[konamiProgress]) {
       konamiProgress += 1;
-      konamiLastAt = now;
       if (konamiProgress >= KONAMI_SEQ.length) {
         konamiProgress = 0;
-        konamiLastAt = 0;
         setInfiniteSpin(!saveState.infiniteSpin, true);
       }
       return;
     }
-    // Break the chain on any wrong key; only restart if this key begins a new chain
-    if (code === KONAMI_SEQ[0]) {
-      konamiProgress = 1;
-      konamiLastAt = now;
-    } else {
-      konamiProgress = 0;
-      konamiLastAt = 0;
-    }
+
+    // Any non-matching key breaks the chain; prefix junk is ignored this way.
+    // If that key itself is ↑, start a fresh chain.
+    konamiProgress = (code === KONAMI_SEQ[0]) ? 1 : 0;
   }
 
   function persistSave() {
